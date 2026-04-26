@@ -1,0 +1,18 @@
+# FiaDOX — Configuración Apache para SPA + API PHP
+# Coloca este archivo en /public/.htaccess
+
+Options -Indexes
+
+RewriteEngine On
+
+# 1. Servir archivos y directorios estáticos directamente (CSS, JS, favicon, etc.)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# 2. Las rutas de la API y auth van a index.php
+RewriteCond %{REQUEST_URI} ^/(api|auth)/
+RewriteRule ^ index.php [L]
+
+# 3. Todo lo demás sirve index.html (la SPA con hash routes)
+RewriteRule ^ index.html [L]
