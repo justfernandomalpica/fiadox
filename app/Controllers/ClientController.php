@@ -69,6 +69,7 @@ class ClientController {
         if(empty($result)) Response::error("El cliente no tiene transacciones o no existe", 404);
         $transactions = array_map(function ($row) {
             return [
+                'id' => $row->id,
                 'amount'=> $row->getAmount(),
                 'type'  => $row->type,
                 'time'  => $row->created_at

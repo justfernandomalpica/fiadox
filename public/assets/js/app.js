@@ -687,6 +687,9 @@ function txRow(tx) {
     <div class="tx-amount ${amt}" aria-label="${label} de ${formatMXN(tx.amount)}">
       ${isCharge ? '+' : '−'}${formatMXN(tx.amount)}
     </div>
+    <button class="btn btn-danger-outline" id="delete-btn" type="button">
+      🗑
+    </button>
   </article>`;
 }
 
