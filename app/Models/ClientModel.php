@@ -27,4 +27,14 @@ class ClientModel extends ActiveRecord {
         if(!preg_match("/^(\d{10})?$/",$this->phone)) $this->setError("Argumento Inválido","El numero de telefono debe ser de 10 digitos");
     }
 
+    public static function getByNamePaginated(string $name, int $page = 1, int $per_page = 10,) : array {
+        $offset = ($page>1) ? ($page-1)*$per_page : 0;
+        self::initialValidation();
+        $table = static::$table;
+
+        $term = "%".$name."%";
+        $query = "SELECT * FROM $table WHERE name LIKE ? LIMIT ? OFFSET ?";
+
+        return self::fetchAll($query, [$term, $per_page, $offset]);
+    }
 }

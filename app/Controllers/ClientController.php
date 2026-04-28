@@ -48,7 +48,10 @@ class ClientController {
     public static function listAll() {
         if(!isset($_GET["page"]) || !isset($_GET["per_page"])) Response::error("Los campos de paginación son obligatorios");
 
-        $clients = ClientModel::all($_GET["page"], $_GET["per_page"]);
+        $isFilteringByName =  isset($_GET["name"]) && $_GET["name"] !== '';
+        $clients = $isFilteringByName ?
+            ClientModel::getByNamePaginated($_GET["name"], $_GET["page"], $_GET["per_page"]) :
+            ClientModel::all($_GET["page"], $_GET["per_page"]);
 
         if(empty($clients)) Response::error("No hay clientes que mostrar",404);
         Response::success([

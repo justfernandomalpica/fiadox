@@ -255,7 +255,7 @@ class ActiveRecord {
         return self::$db->query($query, $params)->fetch_assoc();
     }
 
-    private static function initialValidation() : void {
+    protected static function initialValidation() : void {
         $baseErrorMsg = "Active Record error: ";
         if(is_null(self::$db)) throw new \Exception($baseErrorMsg."An instance of \\mysqli must be setted before any operation");
         if(trim(static::$table) === '') throw new \Exception($baseErrorMsg."Table name cannot be empty");
