@@ -36,16 +36,24 @@ class TransactionModel extends ActiveRecord {
         else $this->amount = (float)$this->rAmount;
     }
 
-    public static function getBalance(int $client_id){
+    public static function getBalance(?int $client_id = null){
         $query = "SELECT 
             COALESCE(SUM(CASE WHEN type = 'charge' THEN amount ELSE 0 END), 0) AS total_charged,
-            COALESCE(SUM(CASE WHEN type = 'payment' THEN amount ELSE 0 END), 0) AS total_paid
-        FROM transactions  WHERE client_id = ?";
-        $result = self::query($query,[$client_id]);
+            COALESCE(SUM(CASE WHEN type = 'payment' THEN amount ELSE 0 END), 0) AS total_paid,
+            COALESCE(SUM(CASE WHEN type = 'charge' THEN amount ELSE -amount END), 0) AS balance
+        FROM transactions";
+        
+        $params = [];
+        if(!is_null($client_id)) {
+            $query .= " WHERE client_id = ?";
+            $params[] = $client_id;
+        }
+
+        $result = self::query($query,$params);
         
         $total_paid = (float) $result["total_paid"];
         $total_charged = (float) $result["total_charged"];
-        $balance = $total_charged - $total_paid;
+        $balance = (float) $result["balance"];
 
         return [
             'Total fiado' => $total_charged,
