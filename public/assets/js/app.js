@@ -11,8 +11,8 @@
  *  - Init / bootstrap
  */
 
-import { api } from './api.js';
-import { Router } from './router.js';
+import { api } from './api.js?v=2';
+import { Router } from './router.js?v=2';
 
 // ════════════════════════════════════════════════════════════════
 // UTILIDADES
