@@ -6,7 +6,8 @@
  *  - Utilidades (formato, errores, UI helpers)
  *  - Componentes globales (header, modal, toast)
  *  - Vistas (renderLogin, renderClients, renderNewClient,
- *             renderClientDetail, renderNewTransaction, renderEditClient)
+ *             renderClientDetail, renderSummary, renderNewTransaction,
+ *             renderEditClient)
  *  - Init / bootstrap
  */
 
@@ -313,9 +314,14 @@ async function renderClients() {
       <div>
         <h1 class="section-title">Clientes</h1>
       </div>
-      <a href="#/nuevo-cliente" class="btn btn-primary btn-lg">
-        ＋ Nuevo cliente
-      </a>
+      <div class="section-actions">
+        <a href="#/resumen" class="btn btn-secondary">
+          Resumen global
+        </a>
+        <a href="#/nuevo-cliente" class="btn btn-primary btn-lg">
+          ＋ Nuevo cliente
+        </a>
+      </div>
     </div>
 
     <div class="search-bar" role="search">
@@ -706,6 +712,73 @@ async function deleteClient(id) {
 }
 
 // ════════════════════════════════════════════════════════════════
+// VISTA: RESUMEN GLOBAL
+// ════════════════════════════════════════════════════════════════
+
+async function renderSummary() {
+  setContent(`
+  ${renderHeader()}
+  <main class="page" id="summary-page">
+    <div class="back-bar">
+      <a href="#/clientes" class="btn btn-ghost">← Volver a clientes</a>
+    </div>
+
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">Resumen global</h1>
+        <p class="section-subtitle">Balance total de fiados</p>
+      </div>
+    </div>
+
+    <div id="summary-wrap">
+      <div class="spinner-wrap" aria-live="polite" aria-label="Cargando resumen global">
+        <div class="spinner" role="status"></div>
+        <p>Cargando…</p>
+      </div>
+    </div>
+  </main>`);
+
+  mountHeader();
+  await loadTransactionsSummary();
+}
+
+async function loadTransactionsSummary() {
+  const wrap = document.getElementById('summary-wrap');
+  if (!wrap) return;
+
+  wrap.innerHTML = `<div class="spinner-wrap" aria-live="polite"><div class="spinner" role="status"></div><p>Cargando…</p></div>`;
+
+  try {
+    const res = await api.getTransactionsSummary();
+    const summary = res.data ?? {};
+    const totalFiado = summary['Total fiado'] ?? 0;
+    const totalPago  = summary['Total pagado'] ?? 0;
+    const granTotal  = summary['Gran total'] ?? 0;
+
+    wrap.innerHTML = `
+    <section class="detail-card" aria-label="Resumen global de transacciones">
+      <div class="balance-grid" aria-label="Balance total de fiados">
+        <div class="balance-item">
+          <div class="balance-label">Total fiado</div>
+          <div class="balance-value">${formatMXN(totalFiado)}</div>
+        </div>
+        <div class="balance-item">
+          <div class="balance-label">Total pagado</div>
+          <div class="balance-value">${formatMXN(totalPago)}</div>
+        </div>
+        <div class="balance-item highlight">
+          <div class="balance-label">Gran total</div>
+          <div class="balance-value">${formatMXN(granTotal)}</div>
+        </div>
+      </div>
+    </section>`;
+  } catch (err) {
+    if (err.status === 401) { handleUnauthorized(); return; }
+    wrap.innerHTML = `<div class="alert alert-error" role="alert">${formatApiError(err)}</div>`;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
 // VISTA: NUEVA TRANSACCIÓN
 // ════════════════════════════════════════════════════════════════
 
@@ -958,6 +1031,7 @@ router
   .on('/clientes/:id/nueva-transaccion',         (p) => guard(() => renderNewTransaction(p), p))
   .on('/clientes/:id/editar',                    (p) => guard(() => renderEditClient(p), p))
   .on('/nuevo-cliente',                          (p) => guard(renderNewClient, p))
+  .on('/resumen',                                (p) => guard(renderSummary, p))
   .notFound(() => router.go('#/clientes'));
 
 // ════════════════════════════════════════════════════════════════
