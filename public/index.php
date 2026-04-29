@@ -14,7 +14,7 @@ $router->get("/auth/me", [AuthController::class,"check"])->middleware(AuthMiddle
 $router->get("/api/clients",[ClientController::class,"listAll"])->middleware(AuthMiddleware::class);
 $router->get("/api/clients/{id}",[ClientController::class,"showDetails"])->where("id","\d+")->middleware(AuthMiddleware::class);
 $router->get("/api/clients/{id}/transactions", [TransactionController::class, "filterById"])->where("id","\d+")->middleware(AuthMiddleware::class);
-$router->get("/api/transactions/summary", [TransactionController::class, "getBalance"]);
+$router->get("/api/transactions/summary", [TransactionController::class, "getBalance"])->middleware(AuthMiddleware::class);
 
 $router->post("/api/clients", [ClientController::class, "addNew"])->middleware(AuthMiddleware::class);
 $router->post("/api/transactions", [TransactionController::class, "addNew"])->middleware(AuthMiddleware::class);
