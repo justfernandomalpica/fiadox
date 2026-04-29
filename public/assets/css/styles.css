@@ -403,6 +403,14 @@ input.input-error, select.input-error, textarea.input-error {
   margin-top: 0.1rem;
 }
 
+.section-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 /* ── Barra de búsqueda ── */
 .search-bar {
   display: flex;
@@ -843,6 +851,11 @@ input.input-error, select.input-error, textarea.input-error {
 
   .section-header .btn {
     width: 100%;
+  }
+
+  .section-actions {
+    width: 100%;
+    flex-direction: column;
   }
 
   .search-bar {

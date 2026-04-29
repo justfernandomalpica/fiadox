@@ -135,6 +135,13 @@ export const api = {
   // ── Transacciones ───────────────────────────────────────────────────────────
 
   /**
+   * GET /api/transactions/summary
+   */
+  async getTransactionsSummary() {
+    return request('/api/transactions/summary');
+  },
+
+  /**
    * POST /api/transactions — FormData (client_id, type, amount, description?)
    */
   async createTransaction({ clientId, type, amount, description }) {
