@@ -1,12 +1,21 @@
+# Entorno
 .env
-/vendor/
-/node_modules/
-/storage
 
+# Dependencias PHP
+/vendor/
+
+# Dependencias Node (módulo React)
+# El build NO se ignora: DOM Cloud lo genera con npm run build en cada deploy.
+/frontend/react/node_modules/
+
+# Almacenamiento y logs
+/storage
+*.log
+
+# Editores
 /.idea/
 /.vscode/
 
+# SO
 .DS_Store
 Thumbs.db
-
-*.log

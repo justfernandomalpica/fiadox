@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="FiaDOX — Sistema de administración de fiados para Abarrotes Virrey" />
+  <meta name="theme-color" content="#1E5AA8" />
+
+  <!-- Evitar que el navegador guarde formularios sensibles -->
+  <meta name="robots" content="noindex, nofollow" />
+
+  <title>FiaDOX — Abarrotes Virrey</title>
+
+  <!-- Favicons (ya existen en /public) -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png"     href="/favicon.png" />
+
+  <!--
+    CSS del proyecto. Vive en public/assets/css/styles.css y Nginx lo sirve
+    directamente como archivo estático. No se duplica ni se importa desde React.
+    Vite no toca este archivo: solo gestiona el JS del bundle.
+  -->
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+</head>
+<body>
+
+  <!-- Punto de montaje de React (mismo id que la SPA vanilla) -->
+  <div id="app" role="main">
+    <!-- Visible mientras el JS carga -->
+    <div class="spinner-wrap" style="min-height:100vh">
+      <div class="spinner" role="status" aria-label="Iniciando aplicación"></div>
+      <p style="color:#7a7a7a;font-family:sans-serif">Iniciando FiaDOX…</p>
+    </div>
+  </div>
+
+  <!-- Aviso si JavaScript está deshabilitado -->
+  <noscript>
+    <p style="
+      font-family: sans-serif;
+      text-align: center;
+      padding: 3rem;
+      color: #b91c1c;
+      font-size: 1.1rem;
+    ">
+      Esta aplicación requiere JavaScript. Por favor actívalo en tu navegador.
+    </p>
+  </noscript>
+
+  <!-- Vite inyecta aquí el script del bundle al hacer build -->
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
